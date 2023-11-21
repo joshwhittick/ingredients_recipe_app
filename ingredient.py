@@ -6,8 +6,8 @@ import pandas as pd
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name('H:/INGREDIENTS/gs-for-ingredients-71c858a7c43c.json', scope)
 gc = gspread.authorize(creds)
-#sheet = gc.open_by_key('1nAZ3lQ8UybpXBEzmmN79Gh4vK3kJb9i8idv2H1BSj5s')
-spreadsheet_key = '1nAZ3lQ8UybpXBEzmmN79Gh4vK3kJb9i8idv2H1BSj5s'
+
+spreadsheet_key = ''
 
 def write_to_google_sheets(data, sheet_number):
     spreadsheet = gc.open_by_key(spreadsheet_key)
