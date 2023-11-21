@@ -3,8 +3,20 @@ from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import pandas as pd
 
+api_json = {"type"= st.secrets['type'],
+"project_id"= st.secrets['project_id'],
+"private_key_id"= st.secrets['private_key_id'],
+"private_key"= st.secrets['private_key'],
+"client_email"= st.secrets['client_email'],
+"client_id"= st.secrets['client_id'],
+"auth_uri"= st.secrets['auth_uri'],
+"token_uri"= st.secrets['token_uri'],
+"auth_provider_x509_cert_url"= st.secrets['auth_provider_x509_cert_url'],
+"client_x509_cert_url"= st.secrets[''],
+"universe_domain"= st.secrets['']}
+
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name('H:/INGREDIENTS/gs-for-ingredients-71c858a7c43c.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(api_json, scope)
 gc = gspread.authorize(creds)
 
 spreadsheet_key = st.secrets["spreadsheet_key"]
