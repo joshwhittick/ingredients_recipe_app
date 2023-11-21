@@ -7,7 +7,7 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 creds = ServiceAccountCredentials.from_json_keyfile_name('H:/INGREDIENTS/gs-for-ingredients-71c858a7c43c.json', scope)
 gc = gspread.authorize(creds)
 
-spreadsheet_key = ''
+spreadsheet_key = st.secrets["spreadsheet_key"]
 
 def write_to_google_sheets(data, sheet_number):
     spreadsheet = gc.open_by_key(spreadsheet_key)
