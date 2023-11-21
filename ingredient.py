@@ -12,8 +12,8 @@ api_json = {"type"= st.secrets['type'],
 "auth_uri"= st.secrets['auth_uri'],
 "token_uri"= st.secrets['token_uri'],
 "auth_provider_x509_cert_url"= st.secrets['auth_provider_x509_cert_url'],
-"client_x509_cert_url"= st.secrets[''],
-"universe_domain"= st.secrets['']}
+"client_x509_cert_url"= st.secrets['client_x509_cert_url'],
+"universe_domain"= st.secrets['universe_domain']}
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name(api_json, scope)
