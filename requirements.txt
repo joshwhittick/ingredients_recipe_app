@@ -2,3 +2,4 @@ streamlit
 pandas
 XlsxWriter
 gspread
+oauth2client
