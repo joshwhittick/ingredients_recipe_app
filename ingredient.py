@@ -78,7 +78,7 @@ def Meal_Choser_Tab():
                 filtered_df['quantity'] = filtered_df['quantity'] * multiply
 
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
-            
+            st.write(out_df)
             #result_df = out_df.groupby('ingredient_name')['quantity'].agg(['sum', 'units']).reset_index()
             #result_df.columns = ['ingredient_name', 'quantity', 'units']
             result_df = out_df.groupby(['ingredient_name', 'units'])['quantity'].sum().reset_index()
