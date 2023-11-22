@@ -69,9 +69,16 @@ def Meal_Choser_Tab():
                 number_of_people = x[2]
 
                 filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)]
+                filtered_df['quantity'] = pd.to_numeric(filtered_df['quantity'], errors='coerce')
+                filtered_df['serves_persons'] = pd.to_numeric(filtered_df['serves_persons'], errors='coerce')
+                serving_sizes = int(filtered_df['serves_persons'].unique())
+                
+                multiply = number_of_people / serving_sizes
+
+                filtered_df['quantity'] = filtered_df['quantity'] * multiply
+
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
             
-            out_df['quantity'] = pd.to_numeric(out_df['quantity'], errors='coerce')
             result_df = out_df.groupby('ingredient_name')['quantity'].sum().reset_index()
             st.write(result_df) 
 
