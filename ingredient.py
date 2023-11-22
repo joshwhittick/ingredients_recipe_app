@@ -16,7 +16,7 @@ api_json = {"type" : st.secrets['type'],
 "universe_domain" : st.secrets['universe_domain']}
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name(api_json, scope)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(api_json, scope)
 gc = gspread.authorize(creds)
 
 spreadsheet_key = st.secrets["spreadsheet_key"]
