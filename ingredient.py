@@ -14,11 +14,9 @@ api_json = {"type" : st.secrets['type'],
 "auth_provider_x509_cert_url" : st.secrets['auth_provider_x509_cert_url'],
 "client_x509_cert_url" : st.secrets['client_x509_cert_url'],
 "universe_domain" : st.secrets['universe_domain']}
-
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive",'https://www.googleapis.com/auth/spreadsheets']
 creds = ServiceAccountCredentials.from_json_keyfile_dict(api_json, scope)
 gc = gspread.authorize(creds)
-
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
 def write_to_google_sheets(data, sheet_number):
