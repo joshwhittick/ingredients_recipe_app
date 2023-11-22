@@ -81,7 +81,7 @@ def Meal_Choser_Tab():
             
             #result_df = out_df.groupby('ingredient_name')['quantity'].agg(['sum', 'units']).reset_index()
             #result_df.columns = ['ingredient_name', 'quantity', 'units']
-            result_df = out_df.groupby('ingredient_name', 'units')['quantity'].sum().reset_index()
+            result_df = out_df.groupby(['ingredient_name', 'units'])['quantity'].sum().reset_index()
             st.write(result_df) 
 
 def Recipe_Builder_Tab():
