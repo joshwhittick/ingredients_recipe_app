@@ -40,11 +40,10 @@ def get_all_meal_data():
     df = pd.DataFrame(data[1:], columns=data[0])
     return df
 
-
+all_meal_data_df = get_all_meal_data()
+meals = get_availabe_meals()
+    
 def Meal_Choser_Tab():
-    all_meal_data_df = get_all_meal_data()
-    meals = get_availabe_meals()
-
     st.title("Choose Meals for the Week:")
     days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
