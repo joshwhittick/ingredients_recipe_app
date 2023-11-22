@@ -71,7 +71,7 @@ def Meal_Choser_Tab():
                 filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)]
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
 
-    st.write(out_df) 
+            st.write(out_df) 
 
 def Recipe_Builder_Tab():
     def ingredients_page():
