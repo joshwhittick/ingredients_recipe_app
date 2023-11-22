@@ -40,7 +40,6 @@ def get_all_meal_data():
     df = pd.DataFrame(data[1:], columns=data[0])
     return df
 
-
 def Meal_Choser_Tab():
     meals = get_availabe_meals()
 
@@ -59,8 +58,6 @@ def Meal_Choser_Tab():
         if st.button("Submit"):
             all_meal_data_df = get_all_meal_data()
             st.success("Data submitted successfully!")
-            #write_to_google_sheets(selected_meal_data, 2)
-
             out_df = pd.DataFrame()
 
             for x in selected_meal_data:
