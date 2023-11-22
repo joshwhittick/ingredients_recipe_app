@@ -61,15 +61,15 @@ def Meal_Choser_Tab():
             st.success("Data submitted successfully!")
             #write_to_google_sheets(selected_meal_data, 2)
 
-    out_df = pd.DataFrame()
+            out_df = pd.DataFrame()
 
-    for x in selected_meal_data:
-        day = x[0]
-        selected_meal = x[1]
-        number_of_people = x[2]
+            for x in selected_meal_data:
+                day = x[0]
+                selected_meal = x[1]
+                number_of_people = x[2]
 
-        filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)]
-        out_df = pd.concat([out_df, filtered_df], ignore_index=True)
+                filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)]
+                out_df = pd.concat([out_df, filtered_df], ignore_index=True)
 
     st.write(out_df) 
 
