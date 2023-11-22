@@ -79,9 +79,9 @@ def Meal_Choser_Tab():
 
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
             
-            result_df = out_df.groupby('ingredient_name')['quantity'].agg(['sum', 'units']).reset_index()
-            result_df.columns = ['ingredient_name', 'quantity', 'units']
-            #result_df = out_df.groupby('ingredient_name')['quantity'].sum().reset_index()
+            #result_df = out_df.groupby('ingredient_name')['quantity'].agg(['sum', 'units']).reset_index()
+            #result_df.columns = ['ingredient_name', 'quantity', 'units']
+            result_df = out_df.groupby('ingredient_name', 'unnits')['quantity'].sum().reset_index()
             st.write(result_df) 
 
 def Recipe_Builder_Tab():
