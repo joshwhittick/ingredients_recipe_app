@@ -91,7 +91,7 @@ def Recipe_Builder_Tab():
             col1, col2, col3 = st.columns(3)
             ingredient_name = col1.text_input(f"Name of Ingredient {i + 1}", key=f"ingredient_name_{i}")
             quantity = col2.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
-            units = col3.selectbox(f"Units {i + 1}", ["g", "kg", "ml", "l", "tsp", "tbsp", "cups", "piece"], key=f"units_{i}")
+            units = col3.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
             data.append([recipe_name, serves_persons, ingredient_name, quantity, units])
         
         if all(st.session_state[f"ingredient_name_{i}"] and st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
