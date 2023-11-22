@@ -70,7 +70,8 @@ def Meal_Choser_Tab():
 
                 filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)]
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
-
+            
+            out_df['quantity'] = pd.to_numeric(out_df['quantity'], errors='coerce')
             result_df = out_df.groupby('ingredient_name')['quantity'].sum().reset_index()
             st.write(result_df) 
 
