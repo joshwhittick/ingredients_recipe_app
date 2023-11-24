@@ -94,11 +94,15 @@ def Recipe_Builder_Tab():
         data = []
 
         for i in range(num_ingredients):
-            col1, col2, col3 = st.columns(3)
-            ingredient_name = col1.text_input(f"Name of Ingredient {i + 1}", key=f"ingredient_name_new_{i}")
-            ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", all_ingredients, key=f"ingredient_name_{i}")
-            quantity = col2.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
-            units = col3.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
+            col1, col2, col3, col4 = st.columns(4)
+            ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", [''] + all_ingredients, key=f"ingredient_name_{i}")
+            if ingredient_name is '':
+                new_ingredient_name = col2.text_input(f"Name of New Ingredient {i + 1}", key=f"ingredient_name_new_{i}")
+            quantity = col3.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
+            units = col4.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
+
+            ingredient_to_add 
+
             data.append([recipe_name, serves_persons, ingredient_name, quantity, units])
         
         if all(st.session_state[f"ingredient_name_{i}"] and st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
