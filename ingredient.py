@@ -87,7 +87,7 @@ def Recipe_Builder_Tab():
     def ingredients_page():
         all_ingredients = get_availabe_ingredients()
         st.title("Recipe Ingredients Input")
-        recipe_name = st.text_input("Recipe Name:")
+        recipe_name = st.text_input("Recipe Name:", key='recipe name')
         num_ingredients = st.number_input("Number of Ingredients:", min_value=1, max_value=50, step=1)
         serves_persons = st.number_input("Number of People Recipe Serves:", min_value=1, max_value=50, step=1)
 
@@ -109,7 +109,7 @@ def Recipe_Builder_Tab():
 
             data.append([recipe_name, serves_persons, ingredient_to_add, quantity, units])
         
-        if all(st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
+        if all(st.session_state['recepe name'] and st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
             if st.button("Submit"):
                 st.success("Data submitted successfully!")
                 write_to_google_sheets(data, 1)
