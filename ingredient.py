@@ -36,7 +36,7 @@ def get_availabe_ingredients():
     worksheet = gc.open_by_key(spreadsheet_key).sheet1
     data = worksheet.get_all_values()
     df = pd.DataFrame(data[1:], columns=data[0])
-    meals = df['ingredient_name'].unique().tolist()
+    all_ingredients = df['ingredient_name'].unique().tolist()
     return all_ingredients
 
 def get_all_meal_data():
