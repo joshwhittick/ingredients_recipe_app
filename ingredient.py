@@ -101,7 +101,10 @@ def Recipe_Builder_Tab():
             quantity = col3.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
             units = col4.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
 
-            ingredient_to_add 
+            if ingredient_name is '':
+                ingredient_to_add = new_ingredient_name
+            else:
+                ingredient_to_add = ingredient_name
 
             data.append([recipe_name, serves_persons, ingredient_name, quantity, units])
         
