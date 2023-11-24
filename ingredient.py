@@ -90,14 +90,13 @@ def Recipe_Builder_Tab():
         recipe_name = st.text_input("Recipe Name:", key='recipe name')
         num_ingredients = st.number_input("Number of Ingredients:", min_value=1, max_value=50, step=1)
         serves_persons = st.number_input("Number of People Recipe Serves:", min_value=1, max_value=50, step=1)
-
         data = []
 
         for i in range(num_ingredients):
             col1, col2, col3, col4 = st.columns(4)
-            ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", [''] + all_ingredients, key=f"ingredient_name_{i}")
+            ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", [''] + all_ingredients, , index=all_ingredients.index(''), key=f"ingredient_name_{i}")
             if ingredient_name is '':
-                new_ingredient_name = col2.text_input(f"Name of New Ingredient {i + 1}", key=f"ingredient_name_new_{i}")
+                new_ingredient_name = col2.text_input(f"Name of Ingredient {i + 1} (New Ingredient)", key=f"ingredient_name_new_{i}")
 
             quantity = col3.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
             units = col4.selectbox(f"Units {i + 1}", ["", "g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
@@ -117,7 +116,6 @@ def Recipe_Builder_Tab():
 
 def main():
     tab_selection = st.sidebar.radio("Select Tab:", ["Meal Chooser", "Recipe Builder"])
-
     if tab_selection == "Meal Chooser":
         Meal_Choser_Tab()
     elif tab_selection == "Recipe Builder":
