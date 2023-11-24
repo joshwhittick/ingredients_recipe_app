@@ -95,7 +95,7 @@ def Recipe_Builder_Tab():
 
         for i in range(num_ingredients):
             col1, col2, col3 = st.columns(3)
-            ingredient_name = col1.text_input(f"Name of Ingredient {i + 1}", key=f"ingredient_name_{i}")
+            ingredient_name = col1.text_input(f"Name of Ingredient {i + 1}", key=f"ingredient_name_new_{i}")
             ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", all_ingredients, key=f"ingredient_name_{i}")
             quantity = col2.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
             units = col3.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
