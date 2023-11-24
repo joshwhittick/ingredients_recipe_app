@@ -98,17 +98,18 @@ def Recipe_Builder_Tab():
             ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", [''] + all_ingredients, key=f"ingredient_name_{i}")
             if ingredient_name is '':
                 new_ingredient_name = col2.text_input(f"Name of New Ingredient {i + 1}", key=f"ingredient_name_new_{i}")
+
             quantity = col3.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
-            units = col4.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
+            units = col4.selectbox(f"Units {i + 1}", ["", "g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
 
             if ingredient_name is '':
                 ingredient_to_add = new_ingredient_name
             else:
                 ingredient_to_add = ingredient_name
 
-            data.append([recipe_name, serves_persons, ingredient_name, quantity, units])
+            data.append([recipe_name, serves_persons, ingredient_to_add, quantity, units])
         
-        if all(st.session_state[f"ingredient_name_{i}"] and st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
+        if all(st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
             if st.button("Submit"):
                 st.success("Data submitted successfully!")
                 write_to_google_sheets(data, 1)
