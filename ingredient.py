@@ -37,6 +37,7 @@ def get_availabe_ingredients():
     data = worksheet.get_all_values()
     df = pd.DataFrame(data[1:], columns=data[0])
     all_ingredients = df['ingredient_name'].unique().tolist()
+    all_ingredients = sorted(all_ingredients)
     return all_ingredients
 
 def get_all_meal_data():
