@@ -87,6 +87,7 @@ def Meal_Choser_Tab():
 def Recipe_Builder_Tab():
     def ingredients_page():
         all_ingredients = get_availabe_ingredients() + ['']
+        st.write(all_ingredients)
         st.title("Recipe Ingredients Input")
         recipe_name = st.text_input("Recipe Name:", key='recipe name')
         num_ingredients = st.number_input("Number of Ingredients:", min_value=1, max_value=50, step=1)
