@@ -109,7 +109,7 @@ def Recipe_Builder_Tab():
 
             data.append([recipe_name, serves_persons, ingredient_to_add, quantity, units])
         
-        if all(st.session_state['recepe name'] and st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
+        if all(st.session_state['recipe name'] and st.session_state[f"quantity_{i}"] and st.session_state[f"units_{i}"] for i in range(num_ingredients)):
             if st.button("Submit"):
                 st.success("Data submitted successfully!")
                 write_to_google_sheets(data, 1)
