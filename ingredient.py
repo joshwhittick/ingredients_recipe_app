@@ -32,6 +32,13 @@ def get_availabe_meals():
     meals = df['recipe_name'].unique().tolist()
     return meals
 
+def get_availabe_ingredients():
+    worksheet = gc.open_by_key(spreadsheet_key).sheet1
+    data = worksheet.get_all_values()
+    df = pd.DataFrame(data[1:], columns=data[0])
+    meals = df['ingredient_name'].unique().tolist()
+    return all_ingredients
+
 def get_all_meal_data():
     worksheet = gc.open_by_key(spreadsheet_key).sheet1
     data = worksheet.get_all_values()
@@ -78,6 +85,7 @@ def Meal_Choser_Tab():
 
 def Recipe_Builder_Tab():
     def ingredients_page():
+        all_ingredients = get_availabe_ingredients()
         st.title("Recipe Ingredients Input")
         recipe_name = st.text_input("Recipe Name:")
         num_ingredients = st.number_input("Number of Ingredients:", min_value=1, max_value=50, step=1)
@@ -88,6 +96,7 @@ def Recipe_Builder_Tab():
         for i in range(num_ingredients):
             col1, col2, col3 = st.columns(3)
             ingredient_name = col1.text_input(f"Name of Ingredient {i + 1}", key=f"ingredient_name_{i}")
+            ingredient_name = col1.selectbox(f"Name of Ingredient {i + 1}", all_ingredients, key=f"ingredient_name_{i}")
             quantity = col2.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
             units = col3.selectbox(f"Units {i + 1}", ["g", "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
             data.append([recipe_name, serves_persons, ingredient_name, quantity, units])
