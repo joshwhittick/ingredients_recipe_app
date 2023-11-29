@@ -102,7 +102,7 @@ def Recipe_Builder_Tab():
                 new_ingredient_name = col2.text_input(f"New Ingredient {i + 1} ", key=f"ingredient_name_new_{i}")
 
             quantity = col3.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
-            units = col4.selectbox(f"Units {i + 1}", ["", "g", 'pinch', 'όσο παίρνει', 'dash', 'splash', "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
+            units = col4.selectbox(f"Units {i + 1}", ["", "g", 'pinch', 'όσο παίρνει', 'splash', "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
 
             if ingredient_name is '':
                 ingredient_to_add = new_ingredient_name
