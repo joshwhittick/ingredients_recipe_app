@@ -24,10 +24,13 @@ spreadsheet_key = st.secrets["spreadsheet_key"]
 def dataframe_to_image(df):
     fig, ax = plt.subplots(figsize=(8, 4))
     ax.axis('off')
-    tbl = table(ax, df, loc='center', colWidth=2.0)
-    tbl.auto_set_font_size(False)
-    tbl.set_fontsize(10)
-    tbl.auto_set_column_width(col=list(range(len(df.columns))))
+
+    # Create a table plot directly using ax.table
+    table_data = []
+    for i, (colname, coldata) in enumerate(df.iteritems()):
+        table_data.append([colname] + coldata.tolist())
+
+    ax.table(cellText=table_data, colLabels=df.columns, loc='center', colWidth=2.0)
     plt.savefig('dataframe_image.png', bbox_inches='tight')
     
 def write_to_google_sheets(data, sheet_number):
