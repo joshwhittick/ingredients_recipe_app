@@ -2,7 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import pandas as pd
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 from pandas.plotting import table
 
 api_json = {"type" : st.secrets['type'],
