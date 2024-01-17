@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from pandas.plotting import table
+from io import BytesIO
 
 api_json = {"type" : st.secrets['type'],
 "project_id" : st.secrets['project_id'],
@@ -21,17 +21,17 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(api_json, scope)
 gc = gspread.authorize(creds)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
-def dataframe_to_image(df):
-    fig, ax = plt.subplots(figsize=(8, 4))
+def df_to_image(dataframe):
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.axis('tight')
     ax.axis('off')
-
-    # Create a table plot directly using ax.table
-    table_data = []
-    for i, (colname, coldata) in enumerate(df.iteritems()):
-        table_data.append([colname] + coldata.tolist())
-
-    ax.table(cellText=table_data, colLabels=df.columns, loc='center', colWidth=2.0)
-    plt.savefig('dataframe_image.png', bbox_inches='tight')
+    ax.table(cellText=dataframe.values,
+             colLabels=dataframe.columns,
+             cellLoc = 'center', loc='center')
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format='png')
+    img_buffer.seek(0)
+    return img_buffer
     
 def write_to_google_sheets(data, sheet_number):
     spreadsheet = gc.open_by_key(spreadsheet_key)
@@ -98,9 +98,7 @@ def Meal_Choser_Tab():
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
             result_df = out_df.groupby(['ingredient_name', 'units'])['quantity'].sum()#.reset_index()
             st.write(result_df)
-            dataframe_to_image(result_df)
-
-            st.image('dataframe_image.png')
+            st.image(df_to_image(result_df), caption='DataFrame as Image', use_container_width=True)
 
 def Recipe_Builder_Tab():
     def ingredients_page():
