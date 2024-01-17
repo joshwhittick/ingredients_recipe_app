@@ -19,6 +19,15 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(api_json, scope)
 gc = gspread.authorize(creds)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
+def dataframe_to_image(df):
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.axis('off')
+    tbl = table(ax, df, loc='center', colWidth=2.0)
+    tbl.auto_set_font_size(False)
+    tbl.set_fontsize(10)
+    tbl.auto_set_column_width(col=list(range(len(df.columns))))
+    plt.savefig('dataframe_image.png', bbox_inches='tight')
+    
 def write_to_google_sheets(data, sheet_number):
     spreadsheet = gc.open_by_key(spreadsheet_key)
     worksheet = spreadsheet.get_worksheet(sheet_number - 1)
@@ -83,7 +92,10 @@ def Meal_Choser_Tab():
 
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
             result_df = out_df.groupby(['ingredient_name', 'units'])['quantity'].sum()#.reset_index()
-            st.write(result_df) 
+            st.write(result_df)
+            dataframe_to_image(result_df)
+
+            st.image('dataframe_image.png')
 
 def Recipe_Builder_Tab():
     def ingredients_page():
