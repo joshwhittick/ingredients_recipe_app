@@ -3,7 +3,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from io import BytesIO
 
 api_json = {"type" : st.secrets['type'],
 "project_id" : st.secrets['project_id'],
@@ -21,33 +20,6 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(api_json, scope)
 gc = gspread.authorize(creds)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
-def df_to_image(dataframe):
-    print("Received DataFrame:")
-    print(dataframe)
-
-    if isinstance(dataframe, pd.Series):
-        print("Converting Series to DataFrame.")
-        dataframe = pd.DataFrame(dataframe).transpose()
-
-    print("DataFrame after potential conversion:")
-    print(dataframe)
-
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.axis('tight')
-    ax.axis('off')
-    
-    try:
-        ax.table(cellText=dataframe.values,
-                 colLabels=dataframe.columns,
-                 cellLoc='center', loc='center')
-        img_buffer = BytesIO()
-        plt.savefig(img_buffer, format='png')
-        img_buffer.seek(0)
-        return img_buffer
-    except Exception as e:
-        print("Error:", e)
-        return None
-    
 def write_to_google_sheets(data, sheet_number):
     spreadsheet = gc.open_by_key(spreadsheet_key)
     worksheet = spreadsheet.get_worksheet(sheet_number - 1)
@@ -113,7 +85,6 @@ def Meal_Choser_Tab():
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
             result_df = out_df.groupby(['ingredient_name', 'units'])['quantity'].sum()#.reset_index()
             st.write(result_df)
-            st.image(df_to_image(result_df), caption='DataFrame as Image', use_container_width=True)
 
 def Recipe_Builder_Tab():
     def ingredients_page():
