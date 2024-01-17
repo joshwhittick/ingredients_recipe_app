@@ -22,16 +22,31 @@ gc = gspread.authorize(creds)
 spreadsheet_key = st.secrets["spreadsheet_key"]
 
 def df_to_image(dataframe):
+    print("Received DataFrame:")
+    print(dataframe)
+
+    if isinstance(dataframe, pd.Series):
+        print("Converting Series to DataFrame.")
+        dataframe = pd.DataFrame(dataframe).transpose()
+
+    print("DataFrame after potential conversion:")
+    print(dataframe)
+
     fig, ax = plt.subplots(figsize=(8, 6))
     ax.axis('tight')
     ax.axis('off')
-    ax.table(cellText=dataframe.values,
-             colLabels=dataframe.columns,
-             cellLoc = 'center', loc='center')
-    img_buffer = BytesIO()
-    plt.savefig(img_buffer, format='png')
-    img_buffer.seek(0)
-    return img_buffer
+    
+    try:
+        ax.table(cellText=dataframe.values,
+                 colLabels=dataframe.columns,
+                 cellLoc='center', loc='center')
+        img_buffer = BytesIO()
+        plt.savefig(img_buffer, format='png')
+        img_buffer.seek(0)
+        return img_buffer
+    except Exception as e:
+        print("Error:", e)
+        return None
     
 def write_to_google_sheets(data, sheet_number):
     spreadsheet = gc.open_by_key(spreadsheet_key)
