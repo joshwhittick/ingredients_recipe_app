@@ -14,7 +14,9 @@ Live: https://ingredients-planner-app.streamlit.app/ (Streamlit Community Cloud,
 
 ## How it works
 
-- **Meal Chooser** - pick a recipe and head-count for Monday to Friday, press Submit. Each recipe's quantities are scaled by `people / serves_persons`, then summed by `ingredient_name` + `units` into one shopping list.
+- **Meal Chooser** - pick a recipe and head-count for Monday to Friday (leave a day blank to skip it), press Submit. Each recipe's quantities are scaled by `people / serves_persons`, then summed by `ingredient_name` + `units` into one shopping list (`shopping_list()`):
+  - an ingredient listed in more than one volume unit (`tsp`, `tbsp`, `ml`, `l`, `cups`) is merged into `ml`;
+  - `unit` items round up to whole items; `g`/`ml` round to whole numbers; everything else to 2 dp.
 - **Recipe Builder** - enter a recipe name, servings and ingredient rows (existing ingredient from the dropdown, or a new one), press Submit to append the rows to `Sheet1`.
 
 ## Data (Google Sheet `Ingredients_DB`)
@@ -26,7 +28,7 @@ Live: https://ingredients-planner-app.streamlit.app/ (Streamlit Community Cloud,
 | `Sheet1_backup_2026-11-06_pre_vegan` | The pre-vegan recipe set (98 rows), kept for rollback. |
 
 - All recipes are vegan as of 2026-11-06: 21 recipes, 206 rows.
-- Each recipe must have a single `serves_persons` value, or Meal Chooser crashes (`int()` of the unique values).
+- Each recipe should have a single `serves_persons` value (Meal Chooser uses the max if they differ).
 - Units should be one of the Recipe Builder options: `g, pinch, όσο παίρνει, splash, unit, ml, l, tsp, tbsp, cups`. Tins/cloves/bunches are counted as `unit`.
 - The sheet must be shared with the service account's `client_email`.
 
@@ -64,10 +66,8 @@ streamlit run ingredient.py
 ## Status
 
 - 2026-11-06 - app was down (`KeyError` on `st.secrets['type']`: Cloud secrets missing); secrets restored, app up. Recipes converted to vegan + 10 new ones added (`Sheet1`).
+- 2026-11-06 - shopping list rounds whole items up, merges volume units into ml, skips blank days; fixed `is ''` and `int(unique())`; dropped unused matplotlib import.
 - Known issues / TODO:
-  - `ingredient.py:102,108` use `ingredient_name is ''` (SyntaxWarning; should be `== ''`).
-  - `int(filtered_df['serves_persons'].unique())` is deprecated in pandas; breaks if a recipe has mixed serving values.
-  - `matplotlib` and `XlsxWriter` are in `requirements.txt` but unused (`plt` imported, never called).
+  - `matplotlib` and `XlsxWriter` are in `requirements.txt` but unused.
   - Uses `oauth2client` (deprecated); `google-auth` is the replacement.
-  - Meal Chooser's Submit appears once all five days have a value, but `" "` (no meal) counts as a value.
   - Streamlit Cloud runtime Python version not pinned.

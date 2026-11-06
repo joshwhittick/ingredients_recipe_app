@@ -1,8 +1,8 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
+import math
 import pandas as pd
-import matplotlib.pyplot as plt
 
 api_json = {"type" : st.secrets['type'],
 "project_id" : st.secrets['project_id'],
@@ -72,19 +72,52 @@ def Meal_Choser_Tab():
                 day = x[0]
                 selected_meal = x[1]
                 number_of_people = x[2]
+                if selected_meal.strip() == "":
+                    continue  # no meal that day
 
-                filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)]
+                filtered_df = all_meal_data_df.loc[(all_meal_data_df['recipe_name'] == selected_meal)].copy()
                 filtered_df['quantity'] = pd.to_numeric(filtered_df['quantity'], errors='coerce')
                 filtered_df['serves_persons'] = pd.to_numeric(filtered_df['serves_persons'], errors='coerce')
-                serving_sizes = int(filtered_df['serves_persons'].unique())
+                serving_sizes = filtered_df['serves_persons'].max()
 
                 multiply = number_of_people / serving_sizes
 
                 filtered_df['quantity'] = filtered_df['quantity'] * multiply
 
                 out_df = pd.concat([out_df, filtered_df], ignore_index=True)
-            result_df = out_df.groupby(['ingredient_name', 'units'])['quantity'].sum()#.reset_index()
-            st.write(result_df)
+            if out_df.empty:
+                st.info("No meals chosen.")
+                return
+            st.dataframe(shopping_list(out_df), hide_index=True)
+
+TO_ML = {"tsp": 5, "tbsp": 15, "ml": 1, "l": 1000, "cups": 240}
+
+def shopping_list(df):
+    """Sum scaled recipe rows into a shopping list.
+
+    Volume units of the same ingredient (e.g. olive oil in ml + tbsp) are merged into ml.
+    'unit' items round up to whole items; g/ml round to whole numbers; others to 2 dp.
+    """
+    df = df[['ingredient_name', 'units', 'quantity']].copy()
+    vol = df['units'].isin(TO_ML.keys())
+    mixed = df[vol].groupby('ingredient_name')['units'].nunique()
+    mixed = set(mixed[mixed > 1].index)
+    merge = vol & df['ingredient_name'].isin(mixed)
+    df.loc[merge, 'quantity'] = df.loc[merge, 'quantity'] * df.loc[merge, 'units'].map(TO_ML)
+    df.loc[merge, 'units'] = 'ml'
+
+    out = df.groupby(['ingredient_name', 'units'], as_index=False)['quantity'].sum()
+
+    def tidy(row):
+        q = row['quantity']
+        if row['units'] == 'unit':
+            return float(math.ceil(q - 1e-9))
+        if row['units'] in ('g', 'ml'):
+            return float(max(1, round(q)))
+        return round(q, 2)
+
+    out['quantity'] = out.apply(tidy, axis=1)
+    return out
 
 def Recipe_Builder_Tab():
     def ingredients_page():
@@ -99,13 +132,13 @@ def Recipe_Builder_Tab():
         for i in range(num_ingredients):
             col1, col2, col3, col4 = st.columns(4)
             ingredient_name = col1.selectbox(f"Ingredient {i + 1}",  all_ingredients, index=all_ingredients.index(''), key=f"ingredient_name_{i}")
-            if ingredient_name is '':
+            if ingredient_name == '':
                 new_ingredient_name = col2.text_input(f"New Ingredient {i + 1} ", key=f"ingredient_name_new_{i}")
 
             quantity = col3.number_input(f"Quantity {i + 1}", min_value=0, step=10, key=f"quantity_{i}")
             units = col4.selectbox(f"Units {i + 1}", ["", "g", 'pinch', 'όσο παίρνει', 'splash', "unit", "ml", "l", "tsp", "tbsp", "cups"], key=f"units_{i}")
 
-            if ingredient_name is '':
+            if ingredient_name == '':
                 ingredient_to_add = new_ingredient_name
             else:
                 ingredient_to_add = ingredient_name
